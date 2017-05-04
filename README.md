@@ -3,4 +3,4 @@
 
 Tatooine Fast Food Restaurant
 
-	-- WIP
+	-- __NOTE: Edit package.json with proper start script for your system.__
