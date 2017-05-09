@@ -8,36 +8,105 @@
 
 
 //========== Init Dependencies ==========//
+
 const express = require("express");
 const port = process.env.PORT || 10000;
 const path = require("path");
-const session = require("express-session");
 const bodyParser = require("body-parser");
-const server = require("http").createServer(app);
-var io = require("socket.io")(server);
+const session = require("express-session");
+const pg = require("pg");
 
 var app = express();
 
-// resolving paths
+const server = require("http").createServer(app);
+
+var io = require("socket.io")(server);
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:Ilikepie5231!@localhost:5432/tatooine";
+
+//resolving paths
 var pF = path.resolve(__dirname, "public");
+var css = path.resolve(__dirname, "css");
 var src = path.resolve(__dirname, "build");
-var dbURL = process.env.DATABASE_URL || ""; // add database url
 
 app.use("/bundle", express.static(src));
+app.use("/styles", express.static(css));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 
-app.use(bodyParser.urlencoded({extended:true}));
 
 app.use(session({
-    secret:"supersecret",
-    resave:"true",
+    secret:"something", 
+    resave: true,
     saveUninitialized: true
 }));
 
-app.get("/", function(req,resp){
-    console.log(req);
-    resp.sendFile(pF+"/order.html");
-    console.log(req);
-})
+app.get("/", function(req, resp){
+    resp.sendFile(pF+"/login.html");
+});
+
+//========== Login Queries ==========//
+
+app.post("/insert", function(req, resp){
+    
+    
+    bcrypt.hash(req.body.pass, 5, function(err, bpass){
+        pg.connect(dbURL, function(err, client, done){
+            if(err){
+                console.log(err);
+                resp.send({status:"fail"});
+            }
+
+            client.query("INSERT INTO users (type, username, password) VALUES ($1, $2, $3) RETURNING id", [req.body.type, req.body.un, bpass], function(err, result){
+
+                done();
+                if(err){
+                    console.log(err);
+                    resp.send({status:"fail"});
+                }
+
+                resp.send({status:"success", id:result.rows[0].id});
+            });
+        });
+    })
+   
+});
+
+app.post("/get", function(req, resp){
+    
+    pg.connect(dbURL, function(err, client, done){
+        if(err){
+            console.log(err);
+            resp.send({status:"fail"});
+        }
+        
+        client.query("SELECT id, type, username, password FROM users WHERE username = $1", [req.body.username], function(err, result){
+            
+            done();
+            if(err){
+                console.log(err);
+                resp.send({status:"fail"});
+            }
+            
+            if(result.rows.length > 0){
+                bcrypt.compare(req.body.pass, result.rows[0].password, function(err, isMatch){
+                    if(isMatch){
+                        console.log("match");
+                        req.session.user = {
+                            username:result.rows[0].username,
+                            id: result.rows[0].id
+                        };
+                        resp.send({status:"success", user:req.session.user});
+                    } else {
+                        console.log(err);
+                    }
+                });
+            } else {
+                resp.send({status:"fail"});
+            }
+        });
+    })
+});
 
 server.listen(port, function(err){
     if(err){
