@@ -15,6 +15,7 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const session = require("express-session");
 const pg = require("pg");
+const bcrypt = require("bcrypt");
 
 var app = express();
 
@@ -45,9 +46,13 @@ app.get("/", function(req, resp){
     resp.sendFile(pF+"/login.html");
 });
 
+app.get("/order", function(req,resp){
+    resp.sendFile(pF+"/order.html");
+});
+
 //========== Login Queries ==========//
 
-app.post("/insert", function(req, resp){
+app.post("/register", function(req, resp){
     
     
     bcrypt.hash(req.body.pass, 5, function(err, bpass){
@@ -57,7 +62,7 @@ app.post("/insert", function(req, resp){
                 resp.send({status:"fail"});
             }
 
-            client.query("INSERT INTO users (type, username, password) VALUES ($1, $2, $3) RETURNING id", [req.body.type, req.body.un, bpass], function(err, result){
+            client.query("INSERT INTO users (user_type, username, password) VALUES ($1, $2, $3) RETURNING user_id", [req.body.user, req.body.un, bpass], function(err, result){
 
                 done();
                 if(err){
@@ -72,7 +77,7 @@ app.post("/insert", function(req, resp){
    
 });
 
-app.post("/get", function(req, resp){
+app.post("/login", function(req, resp){
     
     pg.connect(dbURL, function(err, client, done){
         if(err){
@@ -80,7 +85,7 @@ app.post("/get", function(req, resp){
             resp.send({status:"fail"});
         }
         
-        client.query("SELECT id, type, username, password FROM users WHERE username = $1", [req.body.username], function(err, result){
+        client.query("SELECT user_id, user_type, username, password FROM users WHERE username = $1", [req.body.username], function(err, result){
             
             done();
             if(err){
