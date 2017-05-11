@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start":"node.js"
+    "start": "node node_modules\\webpack\\bin\\webpack.js & node index.js"
   },
   "repository": {
     "type": "git",
@@ -19,12 +19,15 @@
   "homepage": "https://github.com/citTatoine/tato-inn#readme",
   "dependencies": {
     "angular": "^1.6.4",
+    "angular-route": "^1.6.4",
     "bcrypt": "^1.0.2",
     "body-parser": "^1.17.1",
     "bootstrap": "^3.3.7",
     "express": "^4.15.2",
     "express-session": "^1.15.2",
     "jquery": "^3.2.1",
+    "owl.carousel": "^2.2.0",
+    "pg": "^6.1.5",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "socket.io": "^1.7.3",
