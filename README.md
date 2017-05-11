@@ -32,7 +32,10 @@ npm install --save angular angular-route bcrypt body-parser bootstrap express ex
 2. Database Setup
 
 
-<!-- ## Running the tests
+<!-- 
+TEMPLATE
+
+## Running the tests
 
 Explain how to run the automated tests for this system
 
