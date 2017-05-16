@@ -20,7 +20,7 @@ const logfmt = require("logfmt");
 const request = require("request");
 const http = require("http");
 
-
+var dbURL = process.env.DATABASE_URL || "postgres://localhost:5432/tatoinndb"; // edit this line to change DB url
 var app = express();
 
 const server = require("http").createServer(app);
@@ -35,9 +35,11 @@ var db = path.resolve(__dirname, "db");
 var img = path.resolve(__dirname, "img");
 
 const loginOperation = require (db+"/login_query.js");
-const adminAccOperation = require (db+"/account_queries.js");
+const accQueries = require (db+"/account_queries.js");
 const adminMenuOperation = require (db+"/menu_queries.js");
 const adminTransOperation = require (db+"/transaction_queries");
+
+var accounts = new accQueries(dbURL);
 
 app.use("/bundle", express.static(src));
 app.use("/styles", express.static(css));
@@ -88,10 +90,10 @@ app.get("/db/login", function(req,resp){
 
 //========== Account Queries ==========//
 app.get("/db/register", function(req,resp){
-    adminAccOperation.addUser(req,resp);
+    accounts.addUser(req,resp);
 });
 app.get("/db/modify", function(req,resp){
-    adminAccOperation.alterUser(req,resp);
+    accounts.alterUser(req,resp);
 });
 
 //========== Menu Queries ==========//
