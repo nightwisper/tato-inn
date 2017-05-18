@@ -42,7 +42,7 @@
   "devDependencies": {
     "env2": "^2.2.0",
     "nightwatch": "^0.9.15",
-    "selenium-download": "^2.0.10"
+    "selenium-download": "^2.0.10",
     "http": "0.0.0",
     "logfmt": "^1.2.0",
     "pg": "^6.2.2",
