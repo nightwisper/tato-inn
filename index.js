@@ -153,7 +153,8 @@ app.get('/db/getCombo', function(req,resp){
 
 app.get('/db/getItemPrice', function(req,resp){
     menu.getItemPrice(req,resp);
-}
+});
+
 app.get('/db/getAll', function(req,resp){
     menu.getAllItems(req,resp);
 });
