@@ -151,21 +151,19 @@ app.get('/db/getCombo', function(req,resp){
     menu.getCombo(req,resp);
 });
 
-<<<<<<< HEAD
 app.get('/db/getItemPrice', function(req,resp){
     menu.getItemPrice(req,resp);
-=======
+}
 app.get('/db/getAll', function(req,resp){
-    adminMenuOperation.getAllItems(req,resp);
->>>>>>> 922b7cbb5f39eb181197996dbccb9de93b91085a
+    menu.getAllItems(req,resp);
 });
 
 app.get('/db/addOrder', function(req,resp){
-    adminMenuOperation.addOrder(req,resp);
+    menu.addOrder(req,resp);
 });
 
 app.get('/db/addOrderItems', function(req,resp){
-    adminMenuOperation.addOrderItems(req,resp);
+    menu.addOrderItems(req,resp);
 });
 
 
