@@ -7,7 +7,6 @@ var bcrypt = require('bcrypt');
 
 function LoginQuery(dbURL){
     this.dbURL = dbURL;
-    this.user = {id:0, type:""};
 }
 
 LoginQuery.prototype.login = function(req, resp) {
@@ -15,7 +14,7 @@ LoginQuery.prototype.login = function(req, resp) {
     client.connect();
 
 
-    var query = client.query("SELECT user_id, user_type, username, password FROM users WHERE username = '" + req.query.uName+ "'");
+    var query = client.query("SELECT emp_id, emp_type, emp_uname, emp_pword FROM employees WHERE emp_uname = '" + req.query.uName+ "'");
     query.on("end", function (result) {
         client.end();
         if(result.rows.length > 0){

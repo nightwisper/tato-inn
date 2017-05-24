@@ -4,7 +4,7 @@
 module.exports ={
     alterItem: function(req,resp){
         var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://localhost:5432/tatoinndb";
+        var dbURL = process.env.DATABASE_URL || "postgres://localhost:5432/tatoinn";
         var client = new pg.Client(dbURL);
         client.connect();
         var type = "";
@@ -56,7 +56,7 @@ module.exports ={
     },
     addItem: function(req,resp){
         var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://postgres:Ilikepie5231!@localhost:5432/tatooine";
+        var dbURL = process.env.DATABASE_URL || "postgres://postgres:Ilikepie5231!@localhost:5432/tatoinn";
         var client = new pg.Client(dbURL);
         client.connect();
         var type = "";
@@ -78,7 +78,7 @@ module.exports ={
 
     getCategory: function(req, resp) {
         var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatooine";
+        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatoinn";
         var client = new pg.Client(dbURL);
         client.connect();
         var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'");
@@ -101,7 +101,7 @@ module.exports ={
 
     getCombo: function(req, resp) {
         var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatooine";
+        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatoinn";
         var client = new pg.Client(dbURL);
         client.connect();
         var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'" + "and item_combo_price is NOT NULL");
@@ -124,7 +124,7 @@ module.exports ={
 
     getItemPrice: function(req, resp) {
         var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatooine";
+        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatoinn";
         var client = new pg.Client(dbURL);
         client.connect();
         var query = client.query("select * from items WHERE item_name = '" + req.query.itemName+ "'");
