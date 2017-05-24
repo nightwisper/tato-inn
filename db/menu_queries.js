@@ -1,13 +1,7 @@
 /**
  * Created by renzo on 2017-05-13.
  */
-<<<<<<< HEAD
-module.exports ={
-    alterItem: function(req,resp){
-        var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://localhost:5432/tatoinn";
-        var client = new pg.Client(dbURL);
-=======
+
 var pg = require('pg');
 
 function MenuQuery(dbURL){
@@ -21,8 +15,6 @@ MenuQuery.prototype.alterItem = function(req, resp) {
     
     var client = new pg.Client(this.dbURL);
 
-
->>>>>>> 922b7cbb5f39eb181197996dbccb9de93b91085a
         client.connect();
         var type = "";
 
@@ -70,19 +62,11 @@ MenuQuery.prototype.alterItem = function(req, resp) {
                 client.end();
             });
         }
-<<<<<<< HEAD
-    },
-    addItem: function(req,resp){
-        var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://postgres:Ilikepie5231!@localhost:5432/tatoinn";
-        var client = new pg.Client(dbURL);
-=======
 }
 
 MenuQuery.prototype.addItem = function(req, resp) {
     var pg = require('pg');
         var client = new pg.Client(this.dbURL);
->>>>>>> 922b7cbb5f39eb181197996dbccb9de93b91085a
         client.connect();
         var type = "";
 
@@ -101,16 +85,8 @@ MenuQuery.prototype.addItem = function(req, resp) {
         });
 };
 
-<<<<<<< HEAD
-    getCategory: function(req, resp) {
-        var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatoinn";
-        var client = new pg.Client(dbURL);
-=======
 MenuQuery.prototype.getCategory = function(req, resp) {
-        getCategory: function(req, resp) {
         var client = new pg.Client(this.dbURL);
->>>>>>> 922b7cbb5f39eb181197996dbccb9de93b91085a
         client.connect();
         var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'");
 
@@ -149,16 +125,7 @@ MenuQuery.prototype.getItemPrice = function(req, resp) {
         client.end();
         if(result.rows.length > 0) {
 
-<<<<<<< HEAD
-    getCombo: function(req, resp) {
-        var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatoinn";
-        var client = new pg.Client(dbURL);
-        client.connect();
-        var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'" + "and item_combo_price is NOT NULL");
-=======
             var itemPrice = result.rows[0];
->>>>>>> 922b7cbb5f39eb181197996dbccb9de93b91085a
 
             resp.send(itemPrice);
         }
@@ -176,21 +143,8 @@ MenuQuery.prototype.addOrder = function(req, resp) {
         });
 }
 
-<<<<<<< HEAD
-
-
-
-    },
-
-
-    getItemPrice: function(req, resp) {
-        var pg = require('pg');
-        var dbURL = process.env.DATABASE_URL || "postgres://enterprisedb:kenster123@localhost:5444/tatoinn";
-        var client = new pg.Client(dbURL);
-=======
 MenuQuery.prototype.addOrderItems = function(req, resp){
     var client = new pg.Client(this.dbURL);
->>>>>>> 922b7cbb5f39eb181197996dbccb9de93b91085a
         client.connect();
 
         var query = client.query("INSERT INTO orders (order_cost, order_status) VALUES ('"+req.query.total+"','"+req.query.orderStatus+"')RETURNING order_id, order_pickup_id");
