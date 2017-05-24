@@ -36,11 +36,12 @@ var img = path.resolve(__dirname, "img");
 
 const loginQueries = require (db+"/login_query.js");
 const accQueries = require (db+"/account_queries.js");
-const adminMenuOperation = require (db+"/menu_queries.js");
+const menuQueries = require (db+"/menu_queries.js");
 const adminTransOperation = require (db+"/transaction_queries");
 
 var accounts = new accQueries(dbURL);
 var loginQ = new loginQueries(dbURL);
+var menu = new menuQueries(dbURL);
 
 app.use("/bundle", express.static(src));
 app.use("/styles", express.static(css));
@@ -113,22 +114,22 @@ app.get("/db/modify", function(req,resp){
 
 //========== Menu Queries ==========//
 app.get("/db/alterItem", function(req,resp){
-    adminMenuOperation.alterItem(req,resp);
+    menu.alterItem(req,resp);
 });
 app.get("/db/addItem", function(req,resp){
-    adminMenuOperation.addItem(req,resp);
+    menu.addItem(req,resp);
 });
 
 app.get('/db/getCategory', function(req,resp){
-    adminMenuOperation.getCategory(req,resp);
+    menu.getCategory(req,resp);
 });
 
 app.get('/db/getCombo', function(req,resp){
-    adminMenuOperation.getCombo(req,resp);
+    menu.getCombo(req,resp);
 });
 
 app.get('/db/getItemPrice', function(req,resp){
-    adminMenuOperation.getItemPrice(req,resp);
+    menu.getItemPrice(req,resp);
 });
 
 
