@@ -1,7 +1,6 @@
 /**
  * Created by renzo on 2017-05-13.
  */
-
 var pg = require('pg');
 
 function MenuQuery(dbURL){
@@ -14,6 +13,8 @@ function MenuQuery(dbURL){
 MenuQuery.prototype.alterItem = function(req, resp) {
     
     var client = new pg.Client(this.dbURL);
+
+
         client.connect();
         var type = "";
 
@@ -111,7 +112,6 @@ MenuQuery.prototype.getCombo = function(req, resp) {
         if(result.rows.length > 0) {
 
             var foodType = result.rows;
-
             resp.send(foodType);
         }
     });
@@ -130,6 +130,29 @@ MenuQuery.prototype.getItemPrice = function(req, resp) {
 
             resp.send(itemPrice);
         }
-    });};
+    });
+};
+
+MenuQuery.prototype.addOrder = function(req, resp) {
+    var client = new pg.Client(this.dbURL);
+        client.connect();
+
+        var query = client.query("INSERT INTO product_order (item_id, combo, order_id, quantity) VALUES ('"+req.query.item_ID+"','"+req.query.comboBoolean+"','"+req.query.order_ID+"','"+req.query.quantity+"')");
+        query.on("end", function () {
+            client.end();
+            resp.send("success")
+        });
+}
+
+MenuQuery.prototype.addOrderItems = function(req, resp){
+    var client = new pg.Client(this.dbURL);
+        client.connect();
+
+        var query = client.query("INSERT INTO orders (order_cost, order_status) VALUES ('"+req.query.total+"','"+req.query.orderStatus+"')RETURNING order_id, order_pickup_id");
+        query.on("end", function (result) {
+            client.end();
+            resp.send(result.rows[0])
+        });
+}
 
 module.exports = MenuQuery;
