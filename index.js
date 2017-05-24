@@ -62,20 +62,6 @@ app.use(session({
 }));
 
 app.all("/staff", function(req, resp){
-    // if (!req.session.user) {
-
-    //     resp.sendFile(pF+"/login.html");
-        
-    // } else if(req.session.user.type == "admin"){
-
-    //     resp.sendFile(pF+"/administration.html");
-
-    // } else if(req.session.user.type == "chef"){
-
-    //     resp.sendFile(pF+"/kitchen.html");
-
-    // }
-
     resp.sendFile(pF+"/administration.html");
 });
 
