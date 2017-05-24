@@ -1,6 +1,7 @@
 /**
  * Created by renzo on 2017-05-13.
  */
+
 var pg = require('pg');
 
 function MenuQuery(dbURL){
@@ -22,9 +23,14 @@ MenuQuery.prototype.saveItemType = function(req, resp) {
     });
 };
 
+<<<<<<< HEAD
+        client.connect();
+        var type = "";
+=======
 MenuQuery.prototype.alterItem = function(req, resp) {
 
     var client = new pg.Client(this.dbURL);
+>>>>>>> 6ea4e6eac6890aa7ec30073c89ee4924b4b95841
 
 
     client.connect();
@@ -152,7 +158,11 @@ MenuQuery.prototype.getCategory = function(req, resp) {
         });
     };
 
+<<<<<<< HEAD
+MenuQuery.prototype.getCategory = function(req, resp) {
+=======
     MenuQuery.prototype.getCombo = function(req, resp) {
+>>>>>>> 6ea4e6eac6890aa7ec30073c89ee4924b4b95841
         var client = new pg.Client(this.dbURL);
         client.connect();
         var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'" + "and item_comboprice != 0");
