@@ -25,7 +25,7 @@ var item_type = '';
 
 var storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './images/'+ item_type);
+        cb(null, './img/'+ item_type);
     },
     filename: function(req, file, cb) {
         if (!file.originalname.match(/\.(png|jpeg|jpg)$/)) {
@@ -43,8 +43,7 @@ var upload = multer({
     limits: { fileSize: 10000000 }
 }).single('myfile');
 
-var dbURL = process.env.DATABASE_URL || "postgres://localhost:5432/tatoinn"; // edit this line to change DB url
-
+var dbURL = process.env.DATABASE_URL || "postgres://postgres:Ilikepie5231!@localhost:5432/tatoinn"; // edit this line to change DB url
 var app = express();
 
 const server = require("http").createServer(app);
@@ -59,7 +58,6 @@ var css = path.resolve(__dirname, "css");
 var src = path.resolve(__dirname, "build");
 var db = path.resolve(__dirname, "db");
 var img = path.resolve(__dirname, "img");
-var adminP = path.resolve(__dirname, "admin-partials");
 
 const loginQueries = require (db+"/login_query.js");
 const accQueries = require (db+"/account_queries.js");
@@ -93,26 +91,31 @@ app.use(session({
 }));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 app.all("/staff", function(req, resp){
 =======
 
+=======
+>>>>>>> 3b286925ea6bb0880bebc85d39a05b483a889310
 app.all("/staff/*", function(req, resp){
-     if (!req.session.user) {
+    if (!req.session.user) {
 
-         resp.sendFile(pF+"/login.html");
-        
-     } else if(req.session.user.type == "admin"){
+        resp.sendFile(pF+"/login.html");
 
-         resp.sendFile(pF+"/administration.html");
+    } else if(req.session.user.type == "admin"){
 
-     } else if(req.session.user.type == "chef"){
+        resp.sendFile(pF+"/administration.html");
 
-         resp.sendFile(pF+"/kitchen.html");
+    } else if(req.session.user.type == "chef"){
 
-     }
+        resp.sendFile(pF+"/kitchen.html");
 
+<<<<<<< HEAD
 >>>>>>> 6ea4e6eac6890aa7ec30073c89ee4924b4b95841
     resp.sendFile(pF+"/administration.html");
+=======
+    }
+>>>>>>> 3b286925ea6bb0880bebc85d39a05b483a889310
 });
 
 app.all("/", function(req,resp){
@@ -180,8 +183,8 @@ app.get("/db/login", function(req,resp){
 });
 //========== Logout Queries ==========//
 app.get("/logout", function(req,resp){
-   req.session.destroy();
-   resp.send("data");
+    req.session.destroy();
+    resp.send("data");
 });
 //========== Account Queries ==========//
 app.get("/db/register", function(req,resp){
@@ -200,37 +203,34 @@ app.get("/db/saveItemType", function(req,resp){
 
 app.get("/db/alterItem", function(req,resp){
 <<<<<<< HEAD
+<<<<<<< HEAD
     menu.alterItem(req,resp);
 });
 app.get("/db/addItem", function(req,resp){
     menu.addItem(req,resp);
 =======
     if(req.query.edited_item_price != 'default'){
+=======
+    if(req.query.edited_item_type != 'default'){
+>>>>>>> 3b286925ea6bb0880bebc85d39a05b483a889310
         switch(req.query.edited_item_type){
-            case 1:
+            case '1':
                 item_type = "appetizer";
                 break;
-            case 2:
+            case '2':
                 item_type = "breakfast";
                 break;
-            case 3:
-                item_type = "breakfast-combo";
-                break;
-            case 4:
+            case '3':
                 item_type = "burger";
                 break;
-            case 5:
-                item_type = "burger-combo";
-                break;
-            case 6:
+            case '4':
                 item_type = "desserts";
                 break;
-            case 7:
+            case '5':
                 item_type = "drinks";
                 break;
             default:
                 item_type = "misc";
-                break;
         }
     }
     else{
@@ -240,31 +240,25 @@ app.get("/db/addItem", function(req,resp){
     resp.send('success');
 });
 app.get("/db/addItem", function(req,resp){
+    console.log(req.query.added_item_type);
     switch(req.query.added_item_type){
-        case 1:
+        case '1':
             item_type = "appetizer";
             break;
-        case 2:
+        case '2':
             item_type = "breakfast";
             break;
-        case 3:
-            item_type = "breakfast-combo";
-            break;
-        case 4:
+        case '3':
             item_type = "burger";
             break;
-        case 5:
-            item_type = "burger-combo";
-            break;
-        case 6:
+        case '4':
             item_type = "desserts";
             break;
-        case 7:
+        case '5':
             item_type = "drinks";
             break;
         default:
             item_type = "misc";
-            break;
     }
     menu.addItem(req,resp);
     resp.send('success');
@@ -328,7 +322,6 @@ app.get('/db/menuItemDetails', function(req,resp){
 
 //========== Img Upload Error Catching ==========//
 app.post('/upload', function(req, res) {
-    console.log(item_type);
     upload(req, res, function(err) {
         if (err) {
             if (err.code === 'LIMIT_FILE_SIZE') {

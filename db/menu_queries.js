@@ -8,7 +8,6 @@ function MenuQuery(dbURL){
     /*
      * Construction for menuQueries object.
      */
-
     this.dbURL = dbURL;
 }
 
@@ -18,7 +17,6 @@ MenuQuery.prototype.saveItemType = function(req, resp) {
     var query = client.query("SELECT item_type from items where item_name ='"+ req.query.selected_item_name+"'");
     query.on("end", function(result){
         client.end();
-        console.log(result);
         resp.send(result);
     });
 };
@@ -37,30 +35,23 @@ MenuQuery.prototype.alterItem = function(req, resp) {
     var type = "";
 
     switch(req.query.edited_item_type){
-        case 1:
+        case '1':
             type = "appetizer";
             break;
-        case 2:
+        case '2':
             type = "breakfast";
             break;
-        case 3:
-            type = "breakfast-combo";
-            break;
-        case 4:
+        case '3':
             type = "burger";
             break;
-        case 5:
-            type = "burger-combo";
-            break;
-        case 6:
+        case '4':
             type = "desserts";
             break;
-        case 7:
+        case '5':
             type = "drinks";
             break;
         default:
             type = "misc";
-            break;
     }
 
     if(req.query.edited_item_name != 'default'){
@@ -87,7 +78,7 @@ MenuQuery.prototype.alterItem = function(req, resp) {
             client.end();
         });
     }
-    if(req.query.edited_item_img != 'default'){
+    if(req.query.edited_item_img != 'undefined'){
         var query = client.query("UPDATE items SET item_imgurl = '"+req.query.edited_item_img+"' WHERE item_name = "+"'"+req.query.selected_item_name+"'");
         query.on("end", function () {
             client.end();
@@ -101,30 +92,23 @@ MenuQuery.prototype.addItem = function(req, resp) {
     var type = "";
 
     switch(req.query.added_item_type){
-        case 1:
+        case '1':
             type = "appetizer";
             break;
-        case 2:
+        case '2':
             type = "breakfast";
             break;
-        case 3:
-            type = "breakfast-combo";
-            break;
-        case 4:
+        case '3':
             type = "burger";
             break;
-        case 5:
-            type = "burger-combo";
-            break;
-        case 6:
+        case '4':
             type = "desserts";
             break;
-        case 7:
+        case '5':
             type = "drinks";
             break;
         default:
             type = "misc";
-            break;
     }
     var query = client.query("INSERT INTO items (item_name, item_type, item_price, item_comboprice, item_imgurl) VALUES ('"+req.query.added_item_name+"','"+type+"','"+req.query.added_item_price+"','"+req.query.added_item_combo_price+"','"+req.query.added_item_img+"')");
     query.on("end", function () {
@@ -142,7 +126,11 @@ MenuQuery.prototype.deleteItem = function(req, resp) {
 };
 
 MenuQuery.prototype.getCategory = function(req, resp) {
+    var client = new pg.Client(this.dbURL);
+    client.connect();
+    var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'");
 
+<<<<<<< HEAD
         var client = new pg.Client(this.dbURL);
         client.connect();
         var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'");
@@ -181,27 +169,23 @@ MenuQuery.prototype.getCategory = function(req, resp) {
         var client = new pg.Client(this.dbURL);
         client.connect();
         var query = client.query("select * from items");
+=======
+    query.on("end", function (result) {
+        client.end();
+        if(result.rows.length > 0) {
+>>>>>>> 3b286925ea6bb0880bebc85d39a05b483a889310
 
-        query.on("end", function (result) {
-            client.end();
-            if(result.rows.length > 0) {
+            var foodType = result.rows;
 
-                var foodType = result.rows;
-
-                resp.send(foodType);
-            }
-        });
-    };
-
-    MenuQuery.prototype.addOrder = function(req, resp) {
-        var client = new pg.Client(this.dbURL);
-
+            resp.send(foodType);
+        }
+    });
 };
 
 MenuQuery.prototype.getCombo = function(req, resp) {
     var client = new pg.Client(this.dbURL);
     client.connect();
-    var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'" + "and item_comboprice is NOT NULL");
+    var query = client.query("select * from items WHERE item_type = '" + req.query.itemType+ "'" + "and item_comboprice != 0");
 
     query.on("end", function (result) {
         client.end();
@@ -213,26 +197,42 @@ MenuQuery.prototype.getCombo = function(req, resp) {
     });
 };
 
+MenuQuery.prototype.getAllItems = function(req, resp) {
+    var client = new pg.Client(this.dbURL);
+    client.connect();
+    var query = client.query("select * from items");
+
+    query.on("end", function (result) {
+        client.end();
+        if(result.rows.length > 0) {
+
+            var foodType = result.rows;
+
+            resp.send(foodType);
+        }
+    });
+};
+
 MenuQuery.prototype.addOrder = function(req, resp) {
     var client = new pg.Client(this.dbURL);
-        client.connect();
+    client.connect();
 
-        var query = client.query("INSERT INTO product_order (item_id, combo, order_id, quantity) VALUES ('"+req.query.item_ID+"','"+req.query.comboBoolean+"','"+req.query.order_ID+"','"+req.query.quantity+"')");
-        query.on("end", function () {
-            client.end();
-            resp.send("success")
-        });
-    }
+    var query = client.query("INSERT INTO product_order (item_id, combo, order_id, quantity) VALUES ('"+req.query.item_ID+"','"+req.query.comboBoolean+"','"+req.query.order_ID+"','"+req.query.quantity+"')");
+    query.on("end", function () {
+        client.end();
+        resp.send("success")
+    });
+}
 
 MenuQuery.prototype.addOrderItems = function(req, resp){
     var client = new pg.Client(this.dbURL);
-        client.connect();
+    client.connect();
 
-        var query = client.query("INSERT INTO orders (order_cost, order_status) VALUES ('"+req.query.total+"','"+req.query.orderStatus+"')RETURNING order_id, order_pickup");
-        query.on("end", function (result) {
-            client.end();
-            resp.send(result.rows[0])
-        });
-    }
+    var query = client.query("INSERT INTO orders (order_cost, order_status) VALUES ('"+req.query.total+"','"+req.query.orderStatus+"')RETURNING order_id, order_pickup");
+    query.on("end", function (result) {
+        client.end();
+        resp.send(result.rows[0])
+    });
+}
 
-    module.exports = MenuQuery;
+module.exports = MenuQuery;
