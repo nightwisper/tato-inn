@@ -283,6 +283,29 @@ app.get('/db/menuItemDetails', function(req,resp){
     adminTransOperation.getMenuItemDetails(req,resp);
 });
 
+//========= Kitchen Queries ========//
+app.get("/db/getorders", function(req, resp){
+    kitchenOperation.setCredentials(dbURL);
+    kitchenOperation.getOrders(req,resp);
+});
+app.get("/db/getitems", function(req, resp){
+    kitchenOperation.setCredentials(dbURL);
+    kitchenOperation.getItems(req,resp);
+});
+app.get("/db/addSpoil", function(req, resp){
+    kitchenOperation.setCredentials(dbURL);
+    kitchenOperation.addSpoiled(req,resp);
+});
+app.get("/db/getPrice", function(req, resp){
+    kitchenOperation.setCredentials(dbURL);
+    kitchenOperation.getPrice(req,resp);
+});
+
+app.get("/db/updateStatus", function(req, resp){
+    kitchenOperation.setCredentials(dbURL);
+    kitchenOperation.updateStatus(req,resp);
+});
+
 //========== Img Upload Error Catching ==========//
 app.post('/upload', function(req, res) {
     upload(req, res, function(err) {
